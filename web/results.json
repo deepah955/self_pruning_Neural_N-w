@@ -1,14 +1,13 @@
 [
   {
     "lambda": 0.001,
-    "test_accuracy": 43.72,
+    "test_accuracy": 45.0,
     "sparsity": 0.0,
     "epoch_logs": [
       {
         "epoch": 1,
         "cls_loss": 1.785,
-        "spar_loss": 787000.34,
-        "total_loss": 788.7854,
+        "spar_loss": 787001.68,
         "sparsity": 0.0
       }
     ],
