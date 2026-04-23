@@ -1,17 +1,299 @@
 [
   {
-    "lambda": 0.001,
-    "test_accuracy": 45.0,
-    "sparsity": 0.0,
+    "lambda": 0.0001,
+    "test_accuracy": 57.61,
+    "sparsity": 96.56,
     "epoch_logs": [
       {
         "epoch": 1,
-        "cls_loss": 1.785,
-        "spar_loss": 787001.68,
+        "cls_loss": 1.7829,
+        "spar_loss": 350637.13,
         "sparsity": 0.0
+      },
+      {
+        "epoch": 2,
+        "cls_loss": 1.5923,
+        "spar_loss": 69172.77,
+        "sparsity": 0.0
+      },
+      {
+        "epoch": 3,
+        "cls_loss": 1.5119,
+        "spar_loss": 31520.36,
+        "sparsity": 0.0011
+      },
+      {
+        "epoch": 4,
+        "cls_loss": 1.4624,
+        "spar_loss": 19105.18,
+        "sparsity": 0.8829
+      },
+      {
+        "epoch": 5,
+        "cls_loss": 1.4267,
+        "spar_loss": 13247.97,
+        "sparsity": 0.927
+      },
+      {
+        "epoch": 6,
+        "cls_loss": 1.3672,
+        "spar_loss": 10563.64,
+        "sparsity": 0.9376
+      },
+      {
+        "epoch": 7,
+        "cls_loss": 1.3413,
+        "spar_loss": 9229.38,
+        "sparsity": 0.9453
+      },
+      {
+        "epoch": 8,
+        "cls_loss": 1.3275,
+        "spar_loss": 8123.48,
+        "sparsity": 0.951
+      },
+      {
+        "epoch": 9,
+        "cls_loss": 1.31,
+        "spar_loss": 7209.76,
+        "sparsity": 0.9555
+      },
+      {
+        "epoch": 10,
+        "cls_loss": 1.2941,
+        "spar_loss": 6454.55,
+        "sparsity": 0.9591
+      },
+      {
+        "epoch": 11,
+        "cls_loss": 1.271,
+        "spar_loss": 5967.13,
+        "sparsity": 0.9606
+      },
+      {
+        "epoch": 12,
+        "cls_loss": 1.255,
+        "spar_loss": 5672.56,
+        "sparsity": 0.962
+      },
+      {
+        "epoch": 13,
+        "cls_loss": 1.2452,
+        "spar_loss": 5393.47,
+        "sparsity": 0.9633
+      },
+      {
+        "epoch": 14,
+        "cls_loss": 1.2401,
+        "spar_loss": 5132.41,
+        "sparsity": 0.9645
+      },
+      {
+        "epoch": 15,
+        "cls_loss": 1.2341,
+        "spar_loss": 4889.8,
+        "sparsity": 0.9656
+      }
+    ],
+    "ckpt_path": "./checkpoints\\model_lam0.0001.pt",
+    "gates_path": "./checkpoints\\gates_lam0.0001.pt"
+  },
+  {
+    "lambda": 0.001,
+    "test_accuracy": 57.51,
+    "sparsity": 99.94,
+    "epoch_logs": [
+      {
+        "epoch": 1,
+        "cls_loss": 1.7944,
+        "spar_loss": 342700.13,
+        "sparsity": 0.0
+      },
+      {
+        "epoch": 2,
+        "cls_loss": 1.6161,
+        "spar_loss": 62271.38,
+        "sparsity": 0.0
+      },
+      {
+        "epoch": 3,
+        "cls_loss": 1.5421,
+        "spar_loss": 26167.51,
+        "sparsity": 0.0
+      },
+      {
+        "epoch": 4,
+        "cls_loss": 1.4963,
+        "spar_loss": 14627.36,
+        "sparsity": 0.9952
+      },
+      {
+        "epoch": 5,
+        "cls_loss": 1.46,
+        "spar_loss": 9347.24,
+        "sparsity": 0.9979
+      },
+      {
+        "epoch": 6,
+        "cls_loss": 1.3944,
+        "spar_loss": 6985.91,
+        "sparsity": 0.9985
+      },
+      {
+        "epoch": 7,
+        "cls_loss": 1.3706,
+        "spar_loss": 5808.67,
+        "sparsity": 0.9987
+      },
+      {
+        "epoch": 8,
+        "cls_loss": 1.3541,
+        "spar_loss": 4829.94,
+        "sparsity": 0.9989
+      },
+      {
+        "epoch": 9,
+        "cls_loss": 1.3364,
+        "spar_loss": 4025.03,
+        "sparsity": 0.9991
+      },
+      {
+        "epoch": 10,
+        "cls_loss": 1.3239,
+        "spar_loss": 3366.49,
+        "sparsity": 0.9992
+      },
+      {
+        "epoch": 11,
+        "cls_loss": 1.2871,
+        "spar_loss": 2947.2,
+        "sparsity": 0.9992
+      },
+      {
+        "epoch": 12,
+        "cls_loss": 1.2745,
+        "spar_loss": 2689.22,
+        "sparsity": 0.9993
+      },
+      {
+        "epoch": 13,
+        "cls_loss": 1.2618,
+        "spar_loss": 2443.2,
+        "sparsity": 0.9993
+      },
+      {
+        "epoch": 14,
+        "cls_loss": 1.2558,
+        "spar_loss": 2213.07,
+        "sparsity": 0.9993
+      },
+      {
+        "epoch": 15,
+        "cls_loss": 1.2453,
+        "spar_loss": 2001.32,
+        "sparsity": 0.9994
       }
     ],
     "ckpt_path": "./checkpoints\\model_lam0.001.pt",
     "gates_path": "./checkpoints\\gates_lam0.001.pt"
+  },
+  {
+    "lambda": 0.01,
+    "test_accuracy": 55.64,
+    "sparsity": 100.0,
+    "epoch_logs": [
+      {
+        "epoch": 1,
+        "cls_loss": 1.8721,
+        "spar_loss": 342462.09,
+        "sparsity": 0.0
+      },
+      {
+        "epoch": 2,
+        "cls_loss": 1.6942,
+        "spar_loss": 62039.55,
+        "sparsity": 0.0
+      },
+      {
+        "epoch": 3,
+        "cls_loss": 1.5928,
+        "spar_loss": 25959.48,
+        "sparsity": 0.0
+      },
+      {
+        "epoch": 4,
+        "cls_loss": 1.5275,
+        "spar_loss": 14424.54,
+        "sparsity": 0.9999
+      },
+      {
+        "epoch": 5,
+        "cls_loss": 1.4912,
+        "spar_loss": 9143.36,
+        "sparsity": 0.9999
+      },
+      {
+        "epoch": 6,
+        "cls_loss": 1.4266,
+        "spar_loss": 6777.86,
+        "sparsity": 1.0
+      },
+      {
+        "epoch": 7,
+        "cls_loss": 1.4011,
+        "spar_loss": 5590.31,
+        "sparsity": 1.0
+      },
+      {
+        "epoch": 8,
+        "cls_loss": 1.3821,
+        "spar_loss": 4596.74,
+        "sparsity": 1.0
+      },
+      {
+        "epoch": 9,
+        "cls_loss": 1.373,
+        "spar_loss": 3774.56,
+        "sparsity": 1.0
+      },
+      {
+        "epoch": 10,
+        "cls_loss": 1.3598,
+        "spar_loss": 3098.65,
+        "sparsity": 1.0
+      },
+      {
+        "epoch": 11,
+        "cls_loss": 1.3213,
+        "spar_loss": 2665.77,
+        "sparsity": 1.0
+      },
+      {
+        "epoch": 12,
+        "cls_loss": 1.3118,
+        "spar_loss": 2394.63,
+        "sparsity": 1.0
+      },
+      {
+        "epoch": 13,
+        "cls_loss": 1.2997,
+        "spar_loss": 2132.38,
+        "sparsity": 1.0
+      },
+      {
+        "epoch": 14,
+        "cls_loss": 1.2927,
+        "spar_loss": 1883.66,
+        "sparsity": 1.0
+      },
+      {
+        "epoch": 15,
+        "cls_loss": 1.2878,
+        "spar_loss": 1652.04,
+        "sparsity": 1.0
+      }
+    ],
+    "ckpt_path": "./checkpoints\\model_lam0.01.pt",
+    "gates_path": "./checkpoints\\gates_lam0.01.pt"
   }
 ]
