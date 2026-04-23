@@ -48,7 +48,7 @@ def report_sparsity(model: SelfPruningNet, threshold: float = 1e-2) -> None:
         n_pruned = (layer.get_gates().detach() < threshold).sum().item()
         pct      = 100.0 * n_pruned / n_total
         print(f"  PrunableLinear [{i}]"
-              f"  ({layer.in_features}→{layer.out_features})"
+              f"  ({layer.in_features}->{layer.out_features})"
               f"  {n_total:<10} {n_pruned:<10} {pct:.1f}%")
     print("-" * 65)
     total_sparsity = model.overall_sparsity(threshold) * 100

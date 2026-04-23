@@ -53,7 +53,7 @@ def copy_results_for_web(results: list, web_dir: str = "./web") -> None:
     path = os.path.join(web_dir, "results.json")
     with open(path, "w") as f:
         json.dump(results, f, indent=2)
-    print(f"  Web results  → {path}")
+    print(f"  Web results -> {path}")
 
 
 # ─────────────────────────────────────────────────────────────────────
@@ -104,7 +104,7 @@ def main():
     for r in results:
         ckpt = r["ckpt_path"]
         model = load_model(ckpt)
-        print(f"\nλ = {r['lambda']}  |  Accuracy = {r['test_accuracy']}%")
+        print(f"\nLambda = {r['lambda']}  |  Accuracy = {r['test_accuracy']}%")
         report_sparsity(model)
 
     # ── Step 3: Gate distribution plot (best model) ───────────────────
@@ -112,7 +112,7 @@ def main():
     gates = torch.load(best["gates_path"], map_location="cpu")
     plot_path = os.path.join(args.ckpt_dir, "gate_distribution.png")
     plot_gate_distribution(gates, lam=best["lambda"], save_path=plot_path)
-    print(f"\n  Gate plot saved → {plot_path}  (best model: λ={best['lambda']})")
+    print(f"\n  Gate plot saved -> {plot_path}  (best model: Lambda={best['lambda']})")
 
     # Copy plot to web dir so the dashboard can display it
     web_img_path = os.path.join(args.web_dir, "gate_distribution.png")
@@ -121,7 +121,7 @@ def main():
 
     # ── Step 4: Generate Markdown report ──────────────────────────────
     report_path = generate_report(results, args.report)
-    print(f"  Report saved   → {report_path}")
+    print(f"  Report saved -> {report_path}")
 
     # ── Step 5: Copy results for web dashboard ────────────────────────
     # Include epoch_logs for detailed chart in dashboard

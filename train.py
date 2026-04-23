@@ -129,7 +129,7 @@ def train_one(
 
         if verbose:
             print(
-                f"  [λ={lam}] Epoch {epoch:>2}/{epochs} | "
+                f"  [Lambda={lam}] Epoch {epoch:>2}/{epochs} | "
                 f"cls={avg_cls:.4f}  spar={avg_spar:.2f}  "
                 f"total={avg_total:.4f}  sparse={sparsity:.1%}"
             )
@@ -208,7 +208,7 @@ def run_experiment(
     for lam in lambdas:
         if verbose:
             print(f"\n{'='*60}")
-            print(f" Training with λ = {lam}")
+            print(f" Training with Lambda = {lam}")
             print(f"{'='*60}")
         result = train_one(
             lam, epochs, device,
@@ -218,7 +218,7 @@ def run_experiment(
         results.append(result)
         if verbose:
             print(
-                f"\n  ✔ λ={lam} done | "
+                f"\n  OK Lambda={lam} done | "
                 f"Accuracy={result['test_accuracy']}%  "
                 f"Sparsity={result['sparsity']}%"
             )
@@ -231,7 +231,7 @@ def run_experiment(
     with open(summary_path, "w") as f:
         json.dump(slim, f, indent=2)
     if verbose:
-        print(f"\nSummary saved → {summary_path}")
+        print(f"\nSummary saved -> {summary_path}")
 
     return results
 

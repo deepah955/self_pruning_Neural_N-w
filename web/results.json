@@ -1,0 +1,18 @@
+[
+  {
+    "lambda": 0.001,
+    "test_accuracy": 43.72,
+    "sparsity": 0.0,
+    "epoch_logs": [
+      {
+        "epoch": 1,
+        "cls_loss": 1.785,
+        "spar_loss": 787000.34,
+        "total_loss": 788.7854,
+        "sparsity": 0.0
+      }
+    ],
+    "ckpt_path": "./checkpoints\\model_lam0.001.pt",
+    "gates_path": "./checkpoints\\gates_lam0.001.pt"
+  }
+]
