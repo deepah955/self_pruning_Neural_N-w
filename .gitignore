@@ -1,0 +1,30 @@
+# Python byte-compiled
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Training artefacts (large, not needed in repo)
+data/
+checkpoints/
+*.pt
+
+# Plot outputs (generated at runtime)
+*.png
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Pytest cache
+.pytest_cache/
+*.egg-info/
+
+# Virtual env
+venv/
+env/
+.env

@@ -1,0 +1,15 @@
+[build]
+  publish = "web"
+  command = ""          # Static site — no build step needed
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "no-referrer"
+
+[[headers]]
+  for = "/results.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"

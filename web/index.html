@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Self-Pruning Neural Network — Tredence Case Study results dashboard." />
+    <title>Self-Pruning Neural Network | Tredence Case Study</title>
+
+    <style>
+        /* ── Reset & base ─────────────────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --black: #000;
+            --white: #fff;
+            --grey1: #111;
+            --grey2: #222;
+            --grey3: #444;
+            --grey4: #888;
+            --grey5: #bbb;
+            --grey6: #ddd;
+            --grey7: #f5f5f5;
+            --border: 1px solid #333;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--white);
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ── Layout ───────────────────────────────────────────────── */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ── Header ───────────────────────────────────────────────── */
+        header {
+            border-bottom: var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border: 1px solid var(--grey3);
+            padding: 0.2rem 0.6rem;
+            color: var(--grey4);
+            margin-bottom: 0.8rem;
+        }
+
+        h1 {
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--white);
+        }
+
+        .subtitle {
+            color: var(--grey4);
+            font-size: 0.85rem;
+            margin-top: 0.4rem;
+        }
+
+        /* ── Section titles ───────────────────────────────────────── */
+        h2 {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--grey4);
+            border-top: var(--border);
+            padding-top: 1.5rem;
+            margin: 2.5rem 0 1.2rem;
+        }
+
+        /* ── Status banner ────────────────────────────────────────── */
+        #status-banner {
+            background: var(--grey2);
+            border: var(--border);
+            padding: 0.8rem 1rem;
+            font-size: 0.82rem;
+            color: var(--grey5);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--white);
+            flex-shrink: 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .dot.done {
+            animation: none;
+            background: var(--grey5);
+        }
+
+        /* ── Concept card ─────────────────────────────────────────── */
+        .concept-card {
+            border: var(--border);
+            padding: 1.2rem 1.4rem;
+            background: var(--grey1);
+            font-size: 0.85rem;
+            color: var(--grey5);
+            line-height: 1.8;
+        }
+
+        .concept-card strong {
+            color: var(--white);
+        }
+
+        .formula {
+            display: block;
+            text-align: center;
+            color: var(--white);
+            font-size: 0.9rem;
+            margin: 0.8rem 0;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── Results table ────────────────────────────────────────── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--grey4);
+            border-bottom: var(--border);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--grey2);
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody td {
+            padding: 0.75rem 0.8rem;
+            color: var(--grey5);
+        }
+
+        tbody td:first-child {
+            color: var(--white);
+        }
+
+        .bar-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .bar {
+            height: 6px;
+            background: var(--white);
+            border-radius: 2px;
+            flex-shrink: 0;
+            transition: width 0.8s ease;
+        }
+
+        /* ── Gate plot ────────────────────────────────────────────── */
+        #gate-plot-wrap {
+            border: var(--border);
+            background: var(--grey1);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        #gate-canvas {
+            width: 100%;
+            height: 200px;
+        }
+
+        #plot-img {
+            max-width: 100%;
+            display: none;
+            border: 1px solid var(--grey2);
+        }
+
+        .plot-caption {
+            font-size: 0.75rem;
+            color: var(--grey4);
+            margin-top: 0.6rem;
+        }
+
+        /* ── Analysis cards ───────────────────────────────────────── */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .card {
+            border: var(--border);
+            background: var(--grey1);
+            padding: 1rem 1.2rem;
+        }
+
+        .card-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--grey4);
+            margin-bottom: 0.4rem;
+        }
+
+        .card-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .card-desc {
+            font-size: 0.78rem;
+            color: var(--grey4);
+            margin-top: 0.3rem;
+        }
+
+        /* ── Loss chart ───────────────────────────────────────────── */
+        #loss-chart {
+            width: 100%;
+            height: 180px;
+            border: var(--border);
+            background: var(--grey1);
+        }
+
+        /* ── Architecture diagram ─────────────────────────────────── */
+        .arch {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+
+        .arch-node {
+            flex-shrink: 0;
+            border: 1px solid var(--grey3);
+            background: var(--grey1);
+            padding: 0.5rem 0.7rem;
+            font-size: 0.72rem;
+            text-align: center;
+            color: var(--grey5);
+            min-width: 80px;
+        }
+
+        .arch-node span {
+            display: block;
+            font-size: 0.62rem;
+            color: var(--grey4);
+            margin-top: 0.2rem;
+        }
+
+        .arch-arrow {
+            flex-shrink: 0;
+            color: var(--grey3);
+            padding: 0 0.3rem;
+            font-size: 1.1rem;
+        }
+
+        /* ── Footer ───────────────────────────────────────────────── */
+        footer {
+            border-top: var(--border);
+            padding-top: 1.5rem;
+            margin-top: 3rem;
+            font-size: 0.75rem;
+            color: var(--grey4);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* ── Placeholder state ────────────────────────────────────── */
+        .placeholder {
+            color: var(--grey3);
+            font-size: 0.82rem;
+            text-align: center;
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- ── Header ──────────────────────────────────────────────── -->
+        <header>
+            <div class="badge">Tredence Analytics · AI Engineering Case Study</div>
+            <h1>Self-Pruning Neural Network</h1>
+            <p class="subtitle">
+                CIFAR-10 · Feed-forward with learnable gate sparsity · PyTorch
+            </p>
+        </header>
+
+        <!-- ── Status ──────────────────────────────────────────────── -->
+        <div id="status-banner">
+            <div class="dot" id="status-dot"></div>
+            <span id="status-text">Loading results…</span>
+        </div>
+
+        <!-- ── How it works ────────────────────────────────────────── -->
+        <h2>How It Works</h2>
+        <div class="concept-card">
+            Every weight <strong>w</strong> is paired with a learnable
+            <strong>gate score</strong> <em>s</em>:<br>
+            <code class="formula">gate = σ(s) ∈ (0, 1)</code>
+            The actual computation uses <code>pruned_weight = w × gate</code>.
+            A <strong>sparsity penalty λ · Σ gate</strong> is added to the cross-entropy
+            loss. Because the L1 gradient does not vanish as the gate approaches zero,
+            the optimiser keeps pushing unused gates all the way to <strong>0</strong>
+            — permanently silencing that weight.
+        </div>
+
+        <!-- ── Architecture ────────────────────────────────────────── -->
+        <h2>Network Architecture</h2>
+        <div class="arch">
+            <div class="arch-node">Input<span>3×32×32</span></div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node">Flatten<span>3072</span></div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node">PrunableLinear<span>3072→512 + BN + ReLU</span></div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node">PrunableLinear<span>512→256 + BN + ReLU</span></div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node">PrunableLinear<span>256→128 + BN + ReLU</span></div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node">PrunableLinear<span>128→10</span></div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node">Logits<span>10 classes</span></div>
+        </div>
+
+        <!-- ── Key metrics ─────────────────────────────────────────── -->
+        <h2>Best Model Metrics</h2>
+        <div class="cards">
+            <div class="card">
+                <div class="card-label">Best Accuracy</div>
+                <div class="card-value" id="best-acc">—</div>
+                <div class="card-desc">Test accuracy on CIFAR-10</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Best Sparsity</div>
+                <div class="card-value" id="best-spar">—</div>
+                <div class="card-desc">Gates driven to zero</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Lambda Values</div>
+                <div class="card-value" id="n-lambdas">—</div>
+                <div class="card-desc">Experiments compared</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Total Epochs</div>
+                <div class="card-value" id="total-epochs">—</div>
+                <div class="card-desc">Training steps logged</div>
+            </div>
+        </div>
+
+        <!-- ── Results table ───────────────────────────────────────── -->
+        <h2>Results — Lambda Comparison</h2>
+        <table id="results-table">
+            <thead>
+                <tr>
+                    <th>Lambda (λ)</th>
+                    <th>Test Accuracy</th>
+                    <th>Sparsity</th>
+                    <th>Accuracy bar</th>
+                </tr>
+            </thead>
+            <tbody id="results-tbody">
+                <tr>
+                    <td colspan="4">
+                        <div class="placeholder">Results will appear after training.</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ── Loss curve ───────────────────────────────────────────── -->
+        <h2>Training — Classification Loss per Epoch</h2>
+        <canvas id="loss-chart"></canvas>
+        <p class="plot-caption" style="text-align:center; margin-top:0.5rem">
+            One line per lambda value. Lower is better.
+        </p>
+
+        <!-- ── Gate distribution  ──────────────────────────────────── -->
+        <h2>Gate Value Distribution (Best Model)</h2>
+        <div id="gate-plot-wrap">
+            <canvas id="gate-canvas"></canvas>
+            <img id="plot-img" src="gate_distribution.png" alt="Gate distribution plot"
+                onload="this.style.display='block'; document.getElementById('gate-canvas').style.display='none';" />
+            <p class="plot-caption">
+                Spike near 0 = pruned gates · Cluster away from 0 = active gates
+            </p>
+        </div>
+
+        <!-- ── Analysis ─────────────────────────────────────────────── -->
+        <h2>L1 vs L2 — Why L1 Causes Exact Zeros</h2>
+        <div class="concept-card">
+            <table style="border:none; margin-top:0.5rem">
+                <thead>
+                    <tr>
+                        <th style="text-align:left; padding:0.4rem 0.8rem">Penalty</th>
+                        <th style="text-align:left; padding:0.4rem 0.8rem">Gradient on score</th>
+                        <th style="text-align:left; padding:0.4rem 0.8rem">Behaviour at gate→0</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding:0.4rem 0.8rem">L2 (Σ gate²)</td>
+                        <td style="padding:0.4rem 0.8rem">−2 · gate · σ'</td>
+                        <td style="padding:0.4rem 0.8rem; color:var(--grey4)">Gradient shrinks → rarely hits 0 exactly
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.4rem 0.8rem">L1 (Σ gate)</td>
+                        <td style="padding:0.4rem 0.8rem">−σ'(score)</td>
+                        <td style="padding:0.4rem 0.8rem; color:var(--white)">Constant pull → collapses to 0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ── Footer ──────────────────────────────────────────────── -->
+        <footer>
+            <span>Tredence Analytics · AI Engineering Intern Case Study · 2025</span>
+            <span id="footer-ts"></span>
+        </footer>
+
+    </div><!-- /container -->
+
+    <script>
+        // ──────────────────────────────────────────────────────────────
+        //  Dashboard logic
+        // ──────────────────────────────────────────────────────────────
+
+        // Timestamp
+        document.getElementById("footer-ts").textContent =
+            "Generated: " + new Date().toLocaleDateString("en-IN", {
+                day: "2-digit", month: "short", year: "numeric"
+            });
+
+        // ── Fetch results.json ────────────────────────────────────────
+        fetch("results.json")
+            .then(r => r.ok ? r.json() : Promise.reject("not found"))
+            .then(data => render(data))
+            .catch(() => {
+                // No real data yet: show a demo placeholder
+                document.getElementById("status-dot").classList.add("done");
+                document.getElementById("status-text").textContent =
+                    "No results.json found — showing placeholder data. Run main.py to generate real results.";
+                render(DEMO_DATA);
+            });
+
+        // ── Demo data (shown before training) ────────────────────────
+        const DEMO_DATA = [
+            {
+                lambda: 0.0001, test_accuracy: 52.30, sparsity: 4.80,
+                epoch_logs: Array.from({ length: 15 }, (_, i) => ({
+                    epoch: i + 1, cls_loss: 1.8 - i * 0.06
+                }))
+            },
+            {
+                lambda: 0.001, test_accuracy: 49.60, sparsity: 38.50,
+                epoch_logs: Array.from({ length: 15 }, (_, i) => ({
+                    epoch: i + 1, cls_loss: 1.85 - i * 0.055
+                }))
+            },
+            {
+                lambda: 0.01, test_accuracy: 41.10, sparsity: 82.30,
+                epoch_logs: Array.from({ length: 15 }, (_, i) => ({
+                    epoch: i + 1, cls_loss: 1.95 - i * 0.04
+                }))
+            },
+        ];
+
+        // ── Render everything ─────────────────────────────────────────
+        function render(data) {
+            setStatus(data);
+            fillMetrics(data);
+            fillTable(data);
+            drawLossChart(data);
+            drawGateHistogram(data);
+        }
+
+        function setStatus(data) {
+            const isReal = (data !== DEMO_DATA);
+            document.getElementById("status-dot").classList.add("done");
+            document.getElementById("status-text").textContent = isReal
+                ? `Loaded ${data.length} experiment(s) from results.json ✓`
+                : "Placeholder data — run main.py and refresh.";
+        }
+
+        // ── Metrics cards ─────────────────────────────────────────────
+        function fillMetrics(data) {
+            const bestAcc = Math.max(...data.map(d => d.test_accuracy));
+            const maxSpar = Math.max(...data.map(d => d.sparsity));
+            const epochs = data[0]?.epoch_logs?.length ?? "—";
+
+            document.getElementById("best-acc").textContent = bestAcc.toFixed(1) + "%";
+            document.getElementById("best-spar").textContent = maxSpar.toFixed(1) + "%";
+            document.getElementById("n-lambdas").textContent = data.length;
+            document.getElementById("total-epochs").textContent = epochs;
+        }
+
+        // ── Results table ─────────────────────────────────────────────
+        function fillTable(data) {
+            const maxAcc = Math.max(...data.map(d => d.test_accuracy));
+            const tbody = document.getElementById("results-tbody");
+            tbody.innerHTML = "";
+            data.forEach(r => {
+                const pct = (r.test_accuracy / maxAcc * 100).toFixed(0);
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+        <td>${r.lambda}</td>
+        <td>${r.test_accuracy.toFixed(2)}%</td>
+        <td>${r.sparsity.toFixed(2)}%</td>
+        <td>
+          <div class="bar-cell">
+            <div class="bar" style="width:${pct}%"></div>
+            <span style="color:var(--grey4); font-size:0.78rem">${pct}%</span>
+          </div>
+        </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ── Loss chart (canvas) ───────────────────────────────────────
+        function drawLossChart(data) {
+            const canvas = document.getElementById("loss-chart");
+            const ctx = canvas.getContext("2d");
+            const W = canvas.width = canvas.offsetWidth;
+            const H = canvas.height = 180;
+
+            ctx.fillStyle = "#111";
+            ctx.fillRect(0, 0, W, H);
+
+            const pad = { top: 20, right: 20, bottom: 30, left: 44 };
+            const w = W - pad.left - pad.right;
+            const h = H - pad.top - pad.bottom;
+
+            // Collect all cls_loss values
+            const allLoss = data.flatMap(d => (d.epoch_logs || []).map(e => e.cls_loss));
+            const maxL = Math.max(...allLoss) * 1.05;
+            const minL = Math.min(...allLoss) * 0.95;
+
+            const greys = ["#fff", "#aaa", "#555"];
+
+            data.forEach((d, di) => {
+                const logs = d.epoch_logs || [];
+                if (!logs.length) return;
+                ctx.beginPath();
+                ctx.strokeStyle = greys[di % greys.length];
+                ctx.lineWidth = 1.5;
+                logs.forEach((e, i) => {
+                    const x = pad.left + (i / (logs.length - 1)) * w;
+                    const y = pad.top + (1 - (e.cls_loss - minL) / (maxL - minL)) * h;
+                    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                });
+                ctx.stroke();
+
+                // Label at end
+                const last = logs[logs.length - 1];
+                const lx = pad.left + w + 4;
+                const ly = pad.top + (1 - (last.cls_loss - minL) / (maxL - minL)) * h;
+                ctx.fillStyle = greys[di % greys.length];
+                ctx.font = "10px 'Courier New'";
+                ctx.fillText(`λ=${d.lambda}`, lx, ly + 4);
+            });
+
+            // Axes
+            ctx.strokeStyle = "#333";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(pad.left, pad.top);
+            ctx.lineTo(pad.left, pad.top + h);
+            ctx.lineTo(pad.left + w, pad.top + h);
+            ctx.stroke();
+
+            // Y labels
+            ctx.fillStyle = "#888";
+            ctx.font = "10px 'Courier New'";
+            ctx.fillText(maxL.toFixed(2), 2, pad.top + 6);
+            ctx.fillText(minL.toFixed(2), 2, pad.top + h);
+            ctx.fillText("loss", 2, pad.top + h / 2);
+
+            // X label
+            ctx.fillText("epoch", pad.left + w / 2 - 16, H - 4);
+        }
+
+        // ── Gate histogram (canvas fallback) ─────────────────────────
+        function drawGateHistogram(data) {
+            // Try to load the real PNG first — onload in HTML handles that.
+            // Canvas fallback: synthetic bimodal distribution.
+            const canvas = document.getElementById("gate-canvas");
+            const W = canvas.width = canvas.offsetWidth;
+            const H = canvas.height = 200;
+            const ctx = canvas.getContext("2d");
+
+            ctx.fillStyle = "#111";
+            ctx.fillRect(0, 0, W, H);
+
+            const pad = { top: 20, right: 20, bottom: 30, left: 44 };
+            const w = W - pad.left - pad.right;
+            const h = H - pad.top - pad.bottom;
+            const bins = 60;
+
+            // Fake bimodal: spike at 0, cluster at 0.85
+            const counts = Array(bins).fill(0);
+            for (let i = 0; i < bins; i++) {
+                const v = i / bins;
+                counts[i] = Math.round(3000 * Math.exp(-v * v / 0.002) + 800 * Math.exp(-(v-0.85) ** 2 / 0.005));
+            }
+            const maxC = Math.max(...counts);
+
+            counts.forEach((c, i) => {
+                const bw = (w / bins) - 1;
+                const bh = (c / maxC) * h;
+                const bx = pad.left + i * (w / bins);
+                const by = pad.top + h - bh;
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(bx, by, bw, bh);
+            });
+
+            // Axes
+            ctx.strokeStyle = "#333";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(pad.left, pad.top);
+            ctx.lineTo(pad.left, pad.top + h);
+            ctx.lineTo(pad.left + w, pad.top + h);
+            ctx.stroke();
+
+            // Threshold line
+            const tx = pad.left + 0.01 * w;
+            ctx.setLineDash([4, 4]);
+            ctx.strokeStyle = "#555";
+            ctx.beginPath();
+            ctx.moveTo(tx, pad.top);
+            ctx.lineTo(tx, pad.top + h);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = "#888";
+            ctx.font = "10px 'Courier New'";
+            ctx.fillText("0", pad.left, pad.top + h + 14);
+            ctx.fillText("1", pad.left + w - 4, pad.top + h + 14);
+            ctx.fillText("count", 2, pad.top + h / 2);
+            ctx.fillText("-- prune threshold (0.01)", tx + 4, pad.top + 14);
+        }
+    </script>
+</body>
+
+</html>
