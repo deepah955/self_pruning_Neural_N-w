@@ -652,7 +652,7 @@
             const counts = Array(bins).fill(0);
             for (let i = 0; i < bins; i++) {
                 const v = i / bins;
-                counts[i] = Math.round(3000 * Math.exp(-v * v / 0.002) + 800 * Math.exp(-(v-0.85) ** 2 / 0.005));
+                counts[i] = Math.round(3000 * Math.exp(-v * v / 0.002) + 800 * Math.exp(-((v - 0.85) ** 2) / 0.005));
             }
             const maxC = Math.max(...counts);
 
