@@ -10,6 +10,8 @@ checkpoints/
 
 # Plot outputs (generated at runtime)
 *.png
+!web/*.png
+!web/results.json
 
 # Editor
 .vscode/
